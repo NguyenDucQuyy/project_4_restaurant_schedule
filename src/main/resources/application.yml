@@ -1,0 +1,29 @@
+spring:
+  task:
+    scheduling:
+      pool:
+        size: ${TASK_SCHEDULE_POOL_SIZE:10}
+
+feign:
+  vnta-url: ${RESTAURANT_SERVICE_DOMAIN_URL:http://localhost:8086}
+  client:
+    config:
+      scheduleService:
+        connectTimeout: 5000
+        readTimeout: 5000
+
+#server:
+#  port: ${PORT}
+
+logging:
+  level:
+    org.springframework: ${LOG_LEVEL:info}
+    com.project4.restaurant.schedule: ${LOG_LEVEL:info}
+debug: ${DEBUG:false}
+
+
+
+
+
+
+
