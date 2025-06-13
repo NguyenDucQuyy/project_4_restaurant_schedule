@@ -5,7 +5,7 @@ spring:
         size: ${TASK_SCHEDULE_POOL_SIZE:10}
 
 feign:
-  vnta-url: ${RESTAURANT_SERVICE_DOMAIN_URL:http://localhost:8086}
+  restaurant-url: ${RESTAURANT_SERVICE_DOMAIN_URL:http://localhost:8086}
   client:
     config:
       scheduleService:
