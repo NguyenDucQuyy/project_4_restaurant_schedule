@@ -1,17 +1,27 @@
-#
-# Build stage
-#
-FROM maven:3.9.6-eclipse-temurin-21-alpine AS build
-RUN apk update && apk add gcompat
-WORKDIR /app
-COPY pom.xml ./pom.xml
-RUN --mount=type=cache,target=/root/.m2,rw mvn dependency:go-offline -B
-COPY src ./src
-RUN --mount=type=cache,target=/root/.m2,rw mvn -Dmaven.test.skip=true clean package
+# Stage 1: Build the application using Maven
+FROM eclipse-temurin:21-jdk-alpine AS build
 
-#
-# Package stage
-#
-FROM amazoncorretto:21.0.2-alpine3.19
-COPY --from=build /app/target/vnta-schedule-0.0.1-SNAPSHOT.jar /usr/local/lib/vnta-schedule.jar
-ENTRYPOINT ["sh", "-c", "java -jar /usr/local/lib/vnta-schedule.jar"]
+# Cài đặt bash, git, và maven
+RUN apk update && apk add --no-cache bash git maven
+
+# Đặt thư mục làm việc
+WORKDIR /app
+
+# Sao chép pom.xml & preload dependencies
+COPY pom.xml /app/
+RUN mvn dependency:go-offline
+
+# Sao chép source code
+COPY src /app/src
+
+# Build ứng dụng (có thể đổi tên JAR nếu khác)
+RUN mvn clean package -DskipTests
+
+# Stage 2: Chạy ứng dụng
+FROM eclipse-temurin:21-jdk-alpine
+
+WORKDIR /app
+
+COPY --from=build /app/target/restaurant-schedule-0.0.1-SNAPSHOT.jar /app/restaurant-schedule.jar
+
+CMD ["java", "-jar", "restaurant-schedule.jar"]
