@@ -10,4 +10,7 @@ public interface StatisticService {
 
     @RequestLine("POST /project_4/restaurant/schedule/current")
     void updateStatisticsToDay();
+
+    @RequestLine("PUT /project_4/restaurant/schedule/main-dish")
+    void updateMainDish();
 }
