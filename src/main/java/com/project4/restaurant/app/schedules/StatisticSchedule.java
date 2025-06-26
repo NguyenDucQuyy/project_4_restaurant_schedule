@@ -23,10 +23,4 @@ public class StatisticSchedule {
         log.info("=============== processStatisticToDay ");
         statisticService.updateStatisticsToDay();
     }
-
-    @Scheduled(cron = "0 */10 * * * *")
-    public void updateMainDish() {
-        log.info("=============== processUpdateMainDish ");
-        statisticService.updateMainDish();
-    }
 }
